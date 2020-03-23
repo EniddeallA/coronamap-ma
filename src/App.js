@@ -56,7 +56,7 @@ class App extends React.Component {
             textDecoration: "none",
             color: "#000"
           }
-        } >
+        } > 
           View source on GitHub </a>
       </div>
     );
