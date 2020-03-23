@@ -1,14 +1,37 @@
 import React from "react";
 import { Map, ImageOverlay } from "react-leaflet";
-import Alert from "@material-ui/lab/Alert";
+import Statistics from "./Statistics";
 
 class App extends React.Component {
+  state = { drawerOpen: false };
+
+  drawerToggleClickHandler = () => {
+    this.setState({
+      drawerOpen: !this.state.drawerOpen
+    });
+  };
+
+  backdropClickHandler = () => {
+    this.setState({
+      drawerOpen: false
+    });
+  };
+
   render() {
+    let drawerClassName = "customizer-toggle bg-danger";
+    if (this.state.drawerOpen) {
+      drawerClassName = "customizer-toggle bg-danger activated";
+    }
     return (
       <div>
-        <Alert
+        <button
+          id="drawer"
+          className={drawerClassName}
+          onClick={this.drawerToggleClickHandler}
           style={{
-            zIndex: 99999,
+            zIndex: "3000",
+            width: "54px",
+            height: "74px",
             position: "absolute",
             bottom: 20,
             margin: 10,
@@ -17,13 +40,31 @@ class App extends React.Component {
             color: "#ecf0f1",
             backgroundColor: "#e74c3c"
           }}
-          severity=""
         >
-          Numero d'urgence — 0801004747
-        </Alert>
-        {this.props.statistics}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="30px"
+            height="76px"
+            viewBox="0 0 50 80"
+          >
+            <polyline
+              fill="none"
+              stroke="#FFFFFF"
+              stroke-width="1"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              points="45.63,75.8 0.375,38.087 45.63,0.375 "
+            />
+          </svg>
+        </button>
+        <Statistics
+          show={this.state.drawerOpen}
+          click={this.backdropClickHandler}
+          caseconfirmed={this.props.caseconfirmed}
+          cities={this.props.cities}
+        />
         <Map
-          center={[29, -6]}
+          center={[29, -5]}
           zoom={6}
           maxZoom={10}
           attributionControl={true}
@@ -34,7 +75,6 @@ class App extends React.Component {
           animate={true}
           easeLinearity={0.35}
         >
-          {/* <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" /> */}
           <ImageOverlay
             bounds={[
               [35.9485, -0.9984],
@@ -44,20 +84,23 @@ class App extends React.Component {
           ></ImageOverlay>
           {this.props.markers}
         </Map>
-        < a
-        href = "https://github.com/mehdibo/coronamap-ma"
-        target = "_blank"
-        rel = "noopener noreferrer"
-        style = {
-          {
-            zIndex: 99999,
-            position: "absolute",
-            bottom: 0,
-            textDecoration: "none",
-            color: "#000"
-          }
-        } > 
-          View source on GitHub </a>
+        <a
+          href="https://github.com/mehdibo/coronamap-ma"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mr-1"
+        >
+          View source on GitHub
+        </a>
+        -
+        <a
+          href="http://covidmaroc.ma/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="ml-1"
+        >
+          Information source
+        </a>
       </div>
     );
   }
